@@ -2,52 +2,111 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chatbot UNNES</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 40px;
+      margin: 20px;
+      background-color: #FFF9E5; /* kuning muda */
+      color: #003399; /* biru UNNES */
     }
+
+    img {
+      display: block;
+      margin: 0 auto;
+      width: 80px;
+    }
+
     h1 {
-      color: #222;
+      text-align: center;
+      color: #0057A0;
     }
+
+    p {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
     #chatbox {
-      width: 100%;
       max-width: 600px;
-      border: 1px solid #ccc;
+      margin: auto;
+      border: 2px solid #FFD700;
       padding: 10px;
-      margin-bottom: 10px;
       height: 350px;
       overflow-y: auto;
-      background-color: #f8f8f8;
+      background-color: #ffffff;
     }
+
     .user, .bot {
       margin: 5px 0;
     }
+
     .user span, .bot span {
       display: block;
       font-size: 0.9em;
       color: gray;
     }
+
     .user b {
-      color: blue;
+      color: #0057A0;
     }
+
     .bot b {
-      color: green;
+      color: #FFD700;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 10px auto;
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #FFD700;
+      color: #003399;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      form {
+        flex-direction: column;
+      }
+
+      #chatbox {
+        height: 300px;
+      }
+
+      button {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
 
-  <h1>Halo! Saya Chatbot Kampus 😊</h1>
-  <p>Tanyakan apa saja seputar kampusmu!</p>
+  <img src="https://upload.wikimedia.org/wikipedia/id/thumb/3/3f/Logo_Unnes.png/220px-Logo_Unnes.png" alt="Logo UNNES">
+  <h1>Halo! Saya Chatbot UNNES 😊</h1>
+  <p>Tanyakan apa saja seputar kampus UNNES!</p>
 
   <div id="chatbox">
     <div class="bot"><b>Chatbot:</b> <span id="waktu1"></span> Halo! Ada yang bisa saya bantu?</div>
   </div>
 
   <form id="chat-form">
-    <input type="text" id="user-input" placeholder="Ketik pertanyaan di sini..." required style="width: 70%; padding: 5px;">
+    <input type="text" id="user-input" placeholder="Ketik pertanyaan di sini..." required>
     <button type="submit">Kirim</button>
   </form>
 
@@ -56,22 +115,20 @@
     const input = document.getElementById('user-input');
     const chatbox = document.getElementById('chatbox');
 
-    // Fungsi waktu saat ini
     function getTime() {
       const now = new Date();
-      return now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
-    // List pertanyaan dan jawaban
     const database = [
       { tanya: "jadwal kuliah", jawab: "Jadwal kuliah bisa kamu cek di portal akademik ya!" },
-      { tanya: "visi misi", jawab: "visi unnes adalah Menjadi Universitas Bereputasi Dunia dan Pelopor Kecemerlangan Pendidikan yang Berwawasan Konservasi dan Misinya adalah Menyelenggarakan pendidikan yang cemerlang dan bereputasi dunia, Melaksanakan penelitian dalam mengembangkan ilmu pengetahuan dan teknologi, Melaksanakan pengabdian kepada masyarakat untuk memecahkan masalah, memberdayakan, dan menyejahterakan masyarakat, Menerapkan tata kelola yang baik dan mampu beradaptasi dan bersinergi dengan lingkungan secara berkelanjutan danMelaksanakan kerja sama dalam membangun reputasi." },
+      { tanya: "visi misi", jawab: "Visi UNNES adalah Menjadi Universitas Berwawasan Konservasi dan Bereputasi Internasional, dan Misinya meliputi menyelenggarakan pendidikan tinggi yang unggul dan bereputasi dunia, melaksanakan penelitian dan pengembangan ilmu pengetahuan dan teknologi, melaksanakan pengabdian kepada masyarakat, serta menerapkan tata kelola yang baik dan beradaptasi dengan lingkungan." },
       { tanya: "nama rektor", jawab: "Rektor UNNES saat ini adalah Prof. Dr. S Martono, M.Si." },
       { tanya: "unnes", jawab: "Universitas Negeri Semarang (UNNES) adalah universitas negeri di Indonesia yang dipimpin oleh Rektor Prof. Dr. S Martono. UNNES sebelumnya merupakan sebuah perguruan tinggi keguruan (IKIP) dan telah ditingkatkan menjadi universitas. Kampus utamanya terletak di Sekaran (Gunungpati), di wilayah selatan kota Semarang, Jawa Tengah, dengan kampus lain yang terletak di Ngaliyan, Kelud, Bendan Ngisor, dan Kemandungan, Tegal. Pada tanggal 20 Oktober 2022, UNNES menjadi universitas negeri badan hukum (PTN-BH) berdasarkan Peraturan Pemerintah Republik Indonesia No. 36 tahun 2022, yang ditandatangani oleh Presiden Ir Joko Widodo." },
-      { tanya: "dimana alamat kampus unnes", jawab: "Alamat kampus unnes berada di Kelurahan Sekaran, Kecamatan Gunungpati, Kota Semarang, Jawa Tengah, Indonesia, Kode pos 50229"},
-      { tanya: "apa saja jalur masuk unnes", jawab: "Ada tiga jalur masuk ke unnes yaitu dengan jalur Seleksi Nasional Berbasis Prestasi, Selekasi Nasional Berbasis Tes, dan Seleksi Mandiri."},
-      { tanya: "cara daftar ulang", jawab: "Kamu bisa daftar ulang lewat laman resmi admisi.unnes.ac.id" },
-      { tanya: "kantin", jawab: "Kantin kampus bisa kamu temukan di setiap fakultas dekat dengan Gedung Kuliah Bersama (GKB)." },
+      { tanya: "alamat kampus", jawab: "Kampus utama Universitas Negeri Semarang (UNNES) terletak di Kelurahan Sekaran, Kecamatan Gunungpati, Kota Semarang." },
+      { tanya: "jalur masuk", jawab: "Ada tiga jalur masuk UNNES: Seleksi Nasional Berbasis Prestasi, Seleksi Nasional Berbasis Tes, dan Seleksi Mandiri." },
+      { tanya: "daftar ulang", jawab: "Daftar ulang bisa melalui admisi.unnes.ac.id." },
+      { tanya: "kantin", jawab: "Kantin tersedia di setiap fakultas, dekat Gedung Kuliah Bersama." },
       { tanya: "ukm", jawab: `Ada banyak UKM di UNNES
 
 Bidang Olahraga:
@@ -86,7 +143,7 @@ UKM Penelitian, EDS, Woodball, Riptek, Unsec, BP2M, Design, UKKI, UKKK
 UKM lainnya: Catur, E-Sport, UI Equestrian, dll. Unnes juga punya Forum UKM.` },
       { tanya: "program studi", jawab: `Ada banyak Program Studi di UNNES berdasarkan fakultas:
 
-FIP: Bimbingan dan Konseling, Teknologi Pendidikan, Psikologi, Pendidikan Luar Sekolah, Pendidikan Guru Sekolah Dasar, Pendidikan Guru PAUD  
+FIPP: Bimbingan dan Konseling, Teknologi Pendidikan, Psikologi, Pendidikan Luar Sekolah, Pendidikan Guru Sekolah Dasar, Pendidikan Guru PAUD  
 FBS: Desain Komunikasi Visual, Pendidikan Bahasa dan Sastra Indonesia, Sastra Indonesia, Pendidikan Bahasa Inggris, Sastra Inggris, Pendidikan Bahasa Perancis, Sastra Perancis, Pendidikan Bahasa Jepang, Pendidikan Bahasa Arab, Pendidikan Bahasa Mandarin, Pendidikan Seni Rupa, Seni Rupa, Pendidikan Seni Musik, Pendidikan Seni Tari, Pendidikan Bahasa Jawa, Sastra Jawa
 FISIP: Pendidikan Sosiologi dan Antropologi, Pendidikan Pancasila dan Kewarganegaraan, Pendidikan Sejarah, Ilmu Sejarah, Ilmu Politik, Geografi, Pendidikan Geografi, Pendidikan Ilmu Pengetahuan Sosial  
 FMIPA: Statistika Terapan dan Komputasi, Pendidikan Matematika, Matematika, Pendidikan Fisika, Fisika, Pendidikan Kimia, Kimia, Pendidikan Biologi, Biologi, Pendidikan Ilmu Pengetahuan Alam, Teknik Informatika, Sistem Informasi, Ilmu Lingkungan, Statistika dan Sains Data  
@@ -95,30 +152,16 @@ FIK: Ilmu Keolahragaan, Pendidikan Jasmani Kesehatan dan Rekreasi, Pendidikan Ja
 FEB: Manajemen, Akuntansi, Ekonomi Pembangunan, Pendidikan Akuntansi, Pendidikan Koperasi, Pendidikan Administrasi Perkantoran, Ekonomi & Keuangan Islam
 FH: Ilmu Hukum  
 FK: Kedokteran, Gizi, Kesehatan Masyarakat, Farmasi` },
-      { tanya: "kode fakultas", jawab: `Kode Gedung / Fakultas di UNNES:
-FIPP = A  
-FBS  = B
-FISIP = C
-FMIPA  = D
-FT  = E
-FIK  = F
-FEB  = L
-FH  = K
-FK  = M
-Rektorat =  H
-Perpustakaan = G` }
+      { tanya: "kode fakultas", jawab: "Fakultas Ilmu Pendidikan dan Psikologi= A, Fakultas Bahasa dan Seni= B, Fakultas Ilmu Sosial dan Ilmu Politik= C, Fakultas Matematika dan Ilmu Pengetahuan Alam= D, Fakultas Teknik= E, Fakultas Ilmu Keolahragaan= F, Fakultas Ekonomika dan Bisnis= L, Fakulas Hukum= K, Fakultas Kedokteran= M, Rektorat =  H, Perpustakaan = G." }
     ];
 
-    // Tangani kirim pesan
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
       const userText = input.value.trim();
       if (userText === "") return;
 
-      // Tampilkan pesan pengguna
       chatbox.innerHTML += `<div class="user"><b>Kamu:</b> <span>${getTime()}</span> ${userText}</div>`;
 
-      // Cari jawaban dari database
       let botReply = "Maaf, saya belum paham pertanyaan itu. Coba tanya yang lain ya!";
       for (let item of database) {
         if (userText.toLowerCase().includes(item.tanya)) {
@@ -127,9 +170,8 @@ Perpustakaan = G` }
         }
       }
 
-      // Tampilkan balasan chatbot
       setTimeout(() => {
-        chatbox.innerHTML += `<div class="bot"><b>Chatbot:</b> <span>${getTime()}</span> ${botReply.replace(/\n/g, "<br>")}</div>`;
+        chatbox.innerHTML += `<div class="bot"><b>Chatbot:</b> <span>${getTime()}</span> ${botReply}</div>`;
         chatbox.scrollTop = chatbox.scrollHeight;
       }, 500);
 
